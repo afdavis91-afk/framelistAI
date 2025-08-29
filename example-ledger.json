@@ -1,0 +1,178 @@
+{
+  "id": "ledger_2024_001",
+  "runId": "run_2024_001",
+  "policyId": "policy_v1_0",
+  "evidence": [
+    {
+      "id": "ev_001",
+      "type": "table",
+      "source": {
+        "documentId": "doc_001",
+        "pageNumber": 5,
+        "bbox": [0.1, 0.2, 0.8, 0.9],
+        "extractor": "schedule_parser",
+        "confidence": 0.95
+      },
+      "content": {
+        "scheduleType": "joist_schedule",
+        "tableId": "A2.1",
+        "rows": [
+          {
+            "joistSize": "2x10",
+            "joistSpacing": 16,
+            "joistSpan": 14,
+            "species": "SPF",
+            "grade": "No.2"
+          }
+        ]
+      },
+      "metadata": {
+        "tableType": "joist_schedule",
+        "rowCount": 1,
+        "columnCount": 5
+      },
+      "timestamp": "2024-01-15T10:30:00Z",
+      "version": "1.0"
+    },
+    {
+      "id": "ev_002",
+      "type": "text",
+      "source": {
+        "documentId": "doc_001",
+        "pageNumber": 1,
+        "extractor": "pdf_text_extractor",
+        "confidence": 0.9
+      },
+      "content": {
+        "text": "Project specifications require SPF No.2 grade lumber for all framing members unless otherwise specified.",
+        "extractedAt": "2024-01-15T10:30:00Z"
+      },
+      "metadata": {
+        "contentType": "specification_text",
+        "language": "en"
+      },
+      "timestamp": "2024-01-15T10:30:00Z",
+      "version": "1.0"
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "ass_001",
+      "key": "live_load",
+      "value": 40,
+      "basis": "irc_code",
+      "source": "IRC R301.5 - Minimum Design Loads",
+      "confidence": 0.95,
+      "timestamp": "2024-01-15T10:30:00Z"
+    },
+    {
+      "id": "ass_002",
+      "key": "joist_species",
+      "value": "SPF",
+      "basis": "document_derived",
+      "source": "Specification text from doc_001",
+      "confidence": 0.9,
+      "timestamp": "2024-01-15T10:30:00Z"
+    },
+    {
+      "id": "ass_003",
+      "key": "joist_grade",
+      "value": "No.2",
+      "basis": "document_derived",
+      "source": "Specification text from doc_001",
+      "confidence": 0.9,
+      "timestamp": "2024-01-15T10:30:00Z"
+    },
+    {
+      "id": "ass_004",
+      "key": "joist_hanger_type",
+      "value": "joist_hanger",
+      "basis": "regional_default",
+      "source": "Standard connection method",
+      "confidence": 0.75,
+      "timestamp": "2024-01-15T10:30:00Z"
+    }
+  ],
+  "inferences": [
+    {
+      "id": "inf_001",
+      "topic": "joist_schedule",
+      "value": {
+        "joistSize": "2x10",
+        "joistSpacing": 16,
+        "joistSpan": 14,
+        "species": "SPF",
+        "grade": "No.2",
+        "hangerType": "joist_hanger"
+      },
+      "confidence": 0.95,
+      "method": "fromScheduleTable",
+      "usedEvidence": ["ev_001"],
+      "usedAssumptions": ["ass_002", "ass_003", "ass_004"],
+      "explanation": "Extracted from Schedule A2.1, joist spacing 16\" o.c., span 14', based on table data with species and grade from specifications",
+      "alternatives": [
+        {
+          "value": {
+            "joistSize": "2x10",
+            "joistSpacing": 16,
+            "joistSpan": 14,
+            "species": "SPF",
+            "grade": "No.2"
+          },
+          "confidence": 0.9,
+          "reason": "Alternative from table without hanger specification"
+        }
+      ],
+      "timestamp": "2024-01-15T10:30:00Z",
+      "stage": "MultiStrategyInference"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "dec_001",
+      "topic": "joist_schedule",
+      "selectedValue": {
+        "joistSize": "2x10",
+        "joistSpacing": 16,
+        "joistSpan": 14,
+        "species": "SPF",
+        "grade": "No.2",
+        "hangerType": "joist_hanger"
+      },
+      "selectedInferenceId": "inf_001",
+      "competingInferences": [],
+      "justification": "Single high-confidence inference from schedule table with supporting evidence and assumptions",
+      "policyUsed": {
+        "thresholds": {
+          "acceptInference": 0.7,
+          "conflictGap": 0.15
+        },
+        "tiebreakers": ["schedule_table", "explicit_note", "plan_symbol", "vision_llm"],
+        "appliedRules": ["single_inference", "confidence_threshold"]
+      },
+      "timestamp": "2024-01-15T10:30:00Z",
+      "stage": "ConflictResolution"
+    }
+  ],
+  "flags": [
+    {
+      "id": "flag_001",
+      "type": "CONFLICT",
+      "severity": "low",
+      "message": "Conflict auto-resolved for topic joist_schedule. fromScheduleTable selected with 95% confidence.",
+      "topic": "joist_schedule",
+      "evidenceIds": ["ev_001"],
+      "assumptionIds": ["ass_002", "ass_003", "ass_004"],
+      "inferenceIds": ["inf_001"],
+      "decisionId": "dec_001",
+      "timestamp": "2024-01-15T10:30:00Z",
+      "resolved": true
+    }
+  ],
+  "metadata": {
+    "createdAt": "2024-01-15T10:30:00Z",
+    "completedAt": "2024-01-15T10:35:00Z",
+    "totalStages": 4,
+    "successStages": 4
+  }
+}

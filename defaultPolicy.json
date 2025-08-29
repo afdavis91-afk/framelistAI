@@ -1,0 +1,41 @@
+{
+  "id": "default",
+  "version": "1.0.0",
+  "thresholds": {
+    "acceptInference": 0.7,
+    "conflictGap": 0.15,
+    "maxAmbiguity": 0.3
+  },
+  "priors": {
+    "sourceReliability": {
+      "schedule_table": 0.9,
+      "explicit_note": 0.85,
+      "plan_symbol": 0.8,
+      "vision_llm": 0.75,
+      "assumed_default": 0.6
+    }
+  },
+  "tiebreakers": [
+    "schedule_table",
+    "explicit_note",
+    "plan_symbol",
+    "vision_llm"
+  ],
+  "extraction": {
+    "maxVisionTokens": 100000,
+    "maxPages": 50,
+    "enableGeometry": true
+  },
+  "pricing": {
+    "minAccept": 0.8,
+    "maxConcurrent": 5,
+    "retries": 3,
+    "timeoutMs": 30000,
+    "jitterMs": 1000,
+    "maxQuoteAgeDays": 7,
+    "currency": "USD",
+    "fxRate": 1.0,
+    "priceAsOf": "2024-01-15",
+    "vendorPrefs": []
+  }
+}
